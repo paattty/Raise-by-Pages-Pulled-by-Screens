@@ -47,15 +47,15 @@ const FEATURED_BOOKS = [
     title: "The Three Musketeers",
     author: "Alexandre Dumas",
     price: "$18.99",
-    image: "https://covers.openlibrary.org/b/isbn/9780140440256-L.jpg",
-    color: "#FF6600"
+    color: "#FF6600",
+    theme: "dark"
   },
   {
     title: "Journey to the Center of the Earth",
     author: "Jules Verne",
     price: "$16.50",
-    image: "https://covers.openlibrary.org/b/isbn/9780140442977-L.jpg",
-    color: "#4169E1"
+    color: "#4169E1",
+    theme: "light"
   }
 ];
 
@@ -103,11 +103,6 @@ export default function App() {
             <span className="font-mono text-xs tracking-widest uppercase font-bold">Monotype.</span>
           </div>
         </div>
-        <div className="hidden md:flex gap-12 font-mono text-[10px] uppercase tracking-[0.2em]">
-          <a href="#" className="hover:text-[#FF6600] transition-all">The Chase</a>
-          <a href="#" className="hover:text-[#FF6600] transition-all">Coordinates</a>
-          <a href="#" className="hover:text-[#FF6600] transition-all">Manifest</a>
-        </div>
         <div className="flex items-center gap-4">
           <button className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors">
             <ShoppingBag className="w-4 h-4" />
@@ -118,7 +113,7 @@ export default function App() {
       {/* Floating Whale */}
       <motion.div
         style={{ x: whaleX, y: whaleY, rotate: whaleRotate }}
-        className="fixed pointer-events-none z-10 opacity-20 mix-blend-screen"
+        className="absolute top-0 left-0 pointer-events-none z-10 opacity-20 mix-blend-screen"
       >
         <img
           src="https://picsum.photos/seed/whale-3d/1200/600"
@@ -258,14 +253,6 @@ export default function App() {
             ))}
           </div>
         </div>
-
-        {/* Decorative elements */}
-        <motion.div 
-          style={{ rotate: useTransform(scrollYProgress, [0, 1], [0, 360]) }}
-          className="absolute top-1/3 right-[-5%] opacity-5 pointer-events-none"
-        >
-          <Compass className="w-[40rem] h-[40rem]" />
-        </motion.div>
       </section>
 
       {/* Featured Books Section */}
@@ -291,8 +278,34 @@ export default function App() {
                 className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-white/30 transition-all overflow-hidden"
               >
                 <div className="flex flex-col md:flex-row gap-8 items-center">
-                  <div className="w-48 h-72 flex-shrink-0 shadow-2xl transition-transform group-hover:scale-105 duration-500">
-                    <img src={book.image} alt={book.title} className="w-full h-full object-cover rounded shadow-lg" referrerPolicy="no-referrer" />
+                  <div 
+                    className="w-48 h-72 flex-shrink-0 shadow-2xl transition-transform group-hover:scale-105 duration-500 rounded flex flex-col justify-between p-5 relative overflow-hidden border border-white/10"
+                    style={{ backgroundColor: book.color }}
+                  >
+                    {/* Texture overlay */}
+                    <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPHBhdGggZD0iTTAgMEw0IDRaIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPg==')]"></div>
+                    
+                    {/* Spine line */}
+                    <div className="absolute left-4 top-0 bottom-0 w-[1px] bg-black/20" />
+                    
+                    <div className="relative z-10 text-center mt-2">
+                      <span className={`font-mono text-[8px] uppercase tracking-widest ${book.theme === 'light' ? 'text-white' : 'text-black/80'}`}>
+                        Penguin Classics
+                      </span>
+                      <div className={`h-[1px] w-8 mx-auto mt-2 ${book.theme === 'light' ? 'bg-white/50' : 'bg-black/30'}`} />
+                    </div>
+                    
+                    <div className="relative z-10 text-center">
+                      <h4 className={`font-serif text-2xl font-black leading-tight ${book.theme === 'light' ? 'text-white' : 'text-black'}`}>
+                        {book.title}
+                      </h4>
+                    </div>
+                    
+                    <div className="relative z-10 text-center mb-2">
+                      <span className={`font-sans text-[10px] uppercase tracking-widest font-bold ${book.theme === 'light' ? 'text-white/90' : 'text-black/90'}`}>
+                        {book.author}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex flex-col justify-between h-full py-4">
                     <div>
