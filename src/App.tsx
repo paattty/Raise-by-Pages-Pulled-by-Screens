@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-import { Anchor, Waves, BookOpen, Compass, MousePointer2, ShoppingBag, ExternalLink } from "lucide-react";
+import { Anchor, Waves, BookOpen, Compass, MousePointer2, ShoppingBag, ExternalLink, ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const MOBY_DICK_TEXT = `Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to sea as soon as I can.`;
@@ -20,25 +20,38 @@ function InteractiveWord({ word }: InteractiveWordProps) {
     setFontIndex(Math.floor(Math.random() * FONTS.length));
   };
 
+  const handleLeave = () => {
+    setIsHovered(false);
+    setFontIndex(1); // Revert to default serif font
+  };
+
   return (
-    <motion.span
-      className={`inline-block mr-3 mb-2 cursor-pointer transition-all duration-300 ${FONTS[fontIndex]}`}
+    <span 
+      className="relative inline-block mr-4 mb-3 cursor-pointer"
       onMouseEnter={handleHover}
-      onMouseLeave={() => setIsHovered(false)}
-      animate={{
-        scale: isHovered ? 1.4 : 1,
-        rotate: isHovered ? 5 : 0,
-        color: isHovered ? "#FF6600" : "#FFFFFF",
-        fontWeight: isHovered ? 900 : 400,
-      }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 10 
-      }}
+      onMouseLeave={handleLeave}
     >
-      {word}
-    </motion.span>
+      {/* Invisible placeholder to maintain exact spacing and prevent layout shift */}
+      <span className="opacity-0 pointer-events-none font-serif font-normal">{word}</span>
+      
+      {/* Animated word */}
+      <motion.span
+        className={`absolute left-0 top-0 origin-center whitespace-nowrap ${FONTS[fontIndex]}`}
+        animate={{
+          scale: isHovered ? 1.15 : 1,
+          rotate: isHovered ? 3 : 0,
+          color: isHovered ? "#FF6600" : "#FFFFFF",
+          fontWeight: isHovered ? 900 : 400,
+        }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 400, 
+          damping: 10 
+        }}
+      >
+        {word}
+      </motion.span>
+    </span>
   );
 }
 
@@ -179,7 +192,7 @@ export default function App() {
           whileInView={{ opacity: 1, y: 0 }}
           className="text-center max-w-4xl"
         >
-          <h2 className="font-sans text-6xl md:text-8xl font-black leading-none tracking-tighter mb-12">
+          <h2 className="font-inclusive text-6xl md:text-8xl font-black leading-none tracking-tighter mb-12">
             Raised by Pages,<br />Pulled by Screens
           </h2>
           <div className="relative h-96 w-full flex justify-center items-center">
@@ -251,6 +264,17 @@ export default function App() {
             {MOBY_DICK_TEXT.split(" ").map((word, i) => (
               <InteractiveWord key={i} word={word} />
             ))}
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-16 flex justify-center md:justify-start"
+            >
+              <button className="flex items-center gap-3 bg-transparent border border-white/30 text-white px-8 py-4 rounded-full font-mono text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all duration-300">
+                Continue Reading <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
           </div>
         </div>
       </section>
