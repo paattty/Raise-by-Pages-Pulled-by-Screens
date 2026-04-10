@@ -62,8 +62,8 @@ const FEATURED_BOOKS = [
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const springX = useSpring(0, { stiffness: 100, damping: 20 });
-  const springY = useSpring(0, { stiffness: 100, damping: 20 });
+  const springX = useSpring(0, { stiffness: 600, damping: 30 });
+  const springY = useSpring(0, { stiffness: 600, damping: 30 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -247,7 +247,7 @@ export default function App() {
             <h2 className="font-serif text-8xl md:text-[12rem] font-black italic tracking-tighter leading-none text-[#FFC1B0]">Loomings</h2>
           </motion.div>
 
-          <div className="font-serif text-2xl md:text-4xl leading-[2] tracking-wide text-justify md:text-left text-white/90 max-w-4xl mx-auto">
+          <div className="font-serif text-lg md:text-2xl leading-[2] tracking-wide text-justify md:text-left text-white/90 max-w-4xl mx-auto">
             {MOBY_DICK_TEXT.split(" ").map((word, i) => (
               <InteractiveWord key={i} word={word} />
             ))}
